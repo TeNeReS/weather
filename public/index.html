@@ -1,19 +1,35 @@
 <!DOCTYPE html>
-<html ng-app>
+<html ng-app="Weather">
 <head>
     <meta charset="UTF-8">
     <title>Weather</title>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-resource.js">
-    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-resource.js"></script>
+    <script src="controller.js"></script>
 </head>
 
-<body>
+<body ng-controller="mainController">
     <div>
-        <label>Name:</label>
-        <input type="text" ng-model="yourName" placeholder="Enter a name here">
-        <hr>
-        <h1>Hello {{yourName}}!</h1>
+        <h1>Добро пожаловать!</h1>
+        <h2>Чтобы узнать текущую погоду введите название населенного пункта (локации) или координаты в поля ниже</h2>
+        Название населенного пункта (локации): <input type="text" ng-model="name" placeholder="Введите название">
+        <button ng-click="getWeatherByName()" ng-enter="getWeatherByName()">Узнать погоду</button>
+        <p>Координаты:</p>
+        <p>Долгота: <input type="text" ng-model="lon" placeholder="Введите долготу"></p>
+        <p>Широта: <input type="text" ng-model="lat" placeholder="Введите широту"></p>
+        <p><button ng-click="getWeatherByCoordinates()" ng-enter="getWeatherByCoordinates()">Узнать погоду</button></p>
+        <h2>Результат:</h2>
+        <p>Название {{greeting.name}}</p>
+        <p>Страна {{greeting.country}}</p>
+        <p>Координаты:</p>
+        <p>Долгота {{greeting.longitude}}</p>
+        <p>Широта {{greeting.latitude}}</p>
+        <p>Погода:</p>
+        <p>Температура {{greeting.weather.temperature}} °K</p>
+        <p>Ветер {{greeting.weather.wind}} м/с</p>
+        <p>Давление {{greeting.weather.pressure}} гПа</p>
+        <p>Влажность {{greeting.weather.humidity}} %</p>
+        <p></p>
     </div>
 </body>
 </html>

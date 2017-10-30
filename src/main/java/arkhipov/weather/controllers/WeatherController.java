@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/weather")
 public class WeatherController {
-    @Autowired
     private WeatherService service;
+    @Autowired
+    public WeatherController(WeatherService service) {
+        this.service = service;
+    }
 
     @RequestMapping("coordinates")
     public Location getWeatherByCoordinates(@RequestParam(value = "lon") String lon, @RequestParam(value = "lat") String lat) {

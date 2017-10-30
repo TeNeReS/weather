@@ -1,7 +1,9 @@
 package arkhipov.weather.services;
 
+import arkhipov.weather.exceptions.NotFoundException;
 import arkhipov.weather.models.Location;
 import arkhipov.weather.models.Weather;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.springframework.stereotype.Service;
 import retrofit2.Response;
@@ -28,15 +30,7 @@ public class WeatherServiceImpl implements WeatherService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        JsonObject jsonObject = (JsonObject) response.body();
-        String nameWithQuotes = jsonObject.get("name").toString();
-        String name = nameWithQuotes.substring(1, nameWithQuotes.length() - 1);
-        String temperature = jsonObject.getAsJsonObject("main").get("temp").toString();
-        String wind = jsonObject.getAsJsonObject("wind").get("speed").toString();
-        String pressure = jsonObject.getAsJsonObject("main").get("pressure").toString();
-        String humidity = jsonObject.getAsJsonObject("main").get("humidity").toString();
-        Weather weather = new Weather(temperature, wind, pressure, humidity);
-        return new Location(name, lon, lat, weather);
+        return responseToLocation(response);
     }
 
     @Override
@@ -47,14 +41,31 @@ public class WeatherServiceImpl implements WeatherService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        JsonObject jsonObject = (JsonObject) response.body();
-        String nameWithQuotes = jsonObject.get("name").toString();
-//        String name = nameWithQuotes.substring(1, nameWithQuotes.length() - 1);
-        String temperature = jsonObject.getAsJsonObject("main").get("temp").toString();
-        String wind = jsonObject.getAsJsonObject("wind").get("speed").toString();
-        String pressure = jsonObject.getAsJsonObject("main").get("pressure").toString();
-        String humidity = jsonObject.getAsJsonObject("main").get("humidity").toString();
-        Weather weather = new Weather(temperature, wind, pressure, humidity);
-        return null;
+        return responseToLocation(response);
+    }
+
+    private Location responseToLocation (Response response) {
+        if (response.code() == 200) {
+            JsonObject body = (JsonObject) response.body();
+            JsonObject coord = body.getAsJsonObject("coord");
+            String lon = coord.get("lon").toString();
+            String lat = coord.get("lat").toString();
+            JsonObject main = body.getAsJsonObject("main");
+            String temperature = main.get("temp").toString();
+            String pressure = main.get("pressure").toString();
+            String humidity = main.get("humidity").toString();
+            String wind = body.getAsJsonObject("wind").get("speed").toString();
+            JsonElement countryElement = body.getAsJsonObject("sys").get("country");
+            String country = countryElement != null ? trimQuotes(countryElement.toString()) : null;
+            JsonElement nameElement = body.get("name");
+            String name = nameElement != null ? trimQuotes(nameElement.toString()) : null;
+            Weather weather = new Weather(temperature, wind, pressure, humidity);
+            return new Location(name, country, lon, lat, weather);
+        }
+        else throw new NotFoundException("Location not found");
+    }
+
+    private String trimQuotes(String string) {
+        return string.substring(1, string.length() - 1);
     }
 }

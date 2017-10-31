@@ -3,33 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <title>Weather</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-resource.js"></script>
     <script src="controller.js"></script>
+    <style>
+        body, html {
+            height: 100%;
+        }
+
+        .container {
+            min-height: 100%;
+            min-width: 100%;
+        }
+
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+        }
+
+        .row.content {height: 1000px}
+
+        .sidenav {
+            padding-top: 20px;
+            background-color: #f1f1f1;
+            min-height: 100%;
+        }
+
+        footer {
+            background-color: #555;
+            color: white;
+            padding: 15px;
+        }
+
+        @media screen and (max-width: 767px) {
+            .sidenav {
+                height: auto;
+                padding: 15px;
+            }
+            .row.content {height:auto;}
+        }
+    </style>
 </head>
 
 <body ng-controller="mainController">
-    <div>
-        <h1>Добро пожаловать!</h1>
-        <h2>Чтобы узнать текущую погоду введите название населенного пункта (локации) или координаты в поля ниже</h2>
-        Название населенного пункта (локации): <input type="text" ng-model="name" placeholder="Введите название">
-        <button ng-click="getWeatherByName()" ng-enter="getWeatherByName()">Узнать погоду</button>
-        <p>Координаты:</p>
-        <p>Долгота: <input type="text" ng-model="lon" placeholder="Введите долготу"></p>
-        <p>Широта: <input type="text" ng-model="lat" placeholder="Введите широту"></p>
-        <p><button ng-click="getWeatherByCoordinates()" ng-enter="getWeatherByCoordinates()">Узнать погоду</button></p>
-        <h2>Результат:</h2>
-        <p>Название {{greeting.name}}</p>
-        <p>Страна {{greeting.country}}</p>
-        <p>Координаты:</p>
-        <p>Долгота {{greeting.longitude}}</p>
-        <p>Широта {{greeting.latitude}}</p>
-        <p>Погода:</p>
-        <p>Температура {{greeting.weather.temperature}} °K</p>
-        <p>Ветер {{greeting.weather.wind}} м/с</p>
-        <p>Давление {{greeting.weather.pressure}} гПа</p>
-        <p>Влажность {{greeting.weather.humidity}} %</p>
-        <p></p>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <p class="navbar-brand">Weather</p>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
+            </ul>
+        </div>
     </div>
+</nav>
+
+<div class="container text-center">
+    <div class="row content">
+        <div class="col-sm-2 sidenav">
+        </div>
+        <div class="col-sm-8 text-left">
+            <h1>Добро пожаловать в сервис поиска погоды!</h1>
+            <p>Чтобы узнать текущую погоду введите название населенного пункта (локации) или координаты в поля ниже</p>
+            <hr>
+            Название населенного пункта (локации): <input type="text" ng-model="name" placeholder="Введите название">
+            <button ng-click="getWeatherByName()" ng-enter="getWeatherByName()">Узнать погоду</button>
+            <hr>
+            <p>Координаты:</p>
+            <p>Долгота: <input type="text" ng-model="lon" placeholder="Введите долготу"></p>
+            <p>Широта: <input type="text" ng-model="lat" placeholder="Введите широту"></p>
+            <p><button ng-click="getWeatherByCoordinates()" ng-enter="getWeatherByCoordinates()">Узнать погоду</button></p>
+            <hr>
+            <h2>Результат:</h2>
+            <p>Название {{greeting.name}}</p>
+            <p>Страна {{greeting.country}}</p>
+            <p>Координаты:</p>
+            <p>Долгота {{greeting.longitude}}</p>
+            <p>Широта {{greeting.latitude}}</p>
+            <p>Погода:</p>
+            <p>Температура, °K {{greeting.weather.temperature}}</p>
+            <p>Ветер, м/с {{greeting.weather.wind}}</p>
+            <p>Давление, гПа {{greeting.weather.pressure}}</p>
+            <p>Влажность, % {{greeting.weather.humidity}}</p>
+        </div>
+        <div class="col-sm-2 sidenav">
+        </div>
+    </div>
+</div>
+
+<footer class="container-fluid text-center">
+    <p>Weather</p>
+</footer>
 </body>
 </html>

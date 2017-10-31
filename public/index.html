@@ -55,9 +55,9 @@
     <div class="container-fluid">
         <p class="navbar-brand">Weather</p>
         <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
-            </ul>
+            <!--<ul class="nav navbar-nav navbar-right">-->
+                <!--<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>-->
+            <!--</ul>-->
         </div>
     </div>
 </nav>
@@ -70,25 +70,51 @@
             <h1>Добро пожаловать в сервис поиска погоды!</h1>
             <p>Чтобы узнать текущую погоду введите название населенного пункта (локации) или координаты в поля ниже</p>
             <hr>
-            Название населенного пункта (локации): <input type="text" ng-model="name" placeholder="Введите название">
-            <button ng-click="getWeatherByName()" ng-enter="getWeatherByName()">Узнать погоду</button>
+            <form name="formOne">
+                <p>Название населенного пункта (локации): <input type="text" name ="name" ng-model="name" required>
+                <span style="color:red" ng-show="formOne.name.$dirty && formOne.name.$invalid">
+                    <span ng-show="formOne.name.$error.required">Введите название</span>
+                </span></p>
+                <button ng-click="getWeatherByName()" ng-enter="getWeatherByName()" ng-disabled="formOne.name.$error.required || formOne.name.$dirty && formOne.name.$invalid">Узнать погоду</button>
+            </form>
+
             <hr>
-            <p>Координаты:</p>
-            <p>Долгота: <input type="text" ng-model="lon" placeholder="Введите долготу"></p>
-            <p>Широта: <input type="text" ng-model="lat" placeholder="Введите широту"></p>
-            <p><button ng-click="getWeatherByCoordinates()" ng-enter="getWeatherByCoordinates()">Узнать погоду</button></p>
+            <form name="formTwo">
+                <p>Координаты:</p>
+                <p>Долгота: <input type="text" name="lon"  ng-model="lon" longitude required>
+                <span style="color:red" ng-show="formTwo.lon.$dirty && formTwo.lon.$invalid">
+                    <span ng-show="formTwo.lon.$error.required">Введите долготу</span>
+                </span></p>
+                <span style="color:red" ng-show="formTwo.lon.$error.longitude">Значение долготы не валидно или выходит за пределы -180 до 180</span>
+
+                <p>Широта: <input type="text" name="lat" ng-model="lat" latitude required>
+                <span style="color:red" ng-show="formTwo.lat.$dirty && formTwo.lat.$invalid">
+                    <span ng-show="formTwo.lat.$error.required">Введите широту</span>
+                </span></p>
+                <span style="color:red" ng-show="formTwo.lat.$error.latitude">Значение широты не валидно или выходит за пределы -90 до 90</span>
+
+                <p><button ng-click="getWeatherByCoordinates()" ng-enter="getWeatherByCoordinates()" ng-disabled="formTwo.lon.$error.longitude || formTwo.lat.$error.latitude ||
+                formTwo.lon.$error.required || formTwo.lat.$error.required">Узнать погоду</button></p>
+            </form>
+
             <hr>
             <h2>Результат:</h2>
-            <p>Название {{greeting.name}}</p>
-            <p>Страна {{greeting.country}}</p>
+            <p>Название {{location.name}}</p>
+            <p>Страна {{location.country}}</p>
             <p>Координаты:</p>
-            <p>Долгота {{greeting.longitude}}</p>
-            <p>Широта {{greeting.latitude}}</p>
+            <p>Долгота {{location.longitude}}</p>
+            <p>Широта {{location.latitude}}</p>
             <p>Погода:</p>
-            <p>Температура, °K {{greeting.weather.temperature}}</p>
-            <p>Ветер, м/с {{greeting.weather.wind}}</p>
-            <p>Давление, гПа {{greeting.weather.pressure}}</p>
-            <p>Влажность, % {{greeting.weather.humidity}}</p>
+            <p>Температура, °K {{location.weather.temperature}}</p>
+            <p>Ветер, м/с {{location.weather.wind}}</p>
+            <p>Давление, гПа {{location.weather.pressure}}</p>
+            <p>Влажность, % {{location.weather.humidity}}</p>
+            <div class="alert alert-danger" ng-show="danger">
+                <p>{{message}}</p>
+            </div>
+            <div class="alert alert-success" ng-show="success">
+                <p>Weather found!</p>
+            </div>
         </div>
         <div class="col-sm-2 sidenav">
         </div>

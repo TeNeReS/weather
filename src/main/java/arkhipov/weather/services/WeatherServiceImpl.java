@@ -1,5 +1,6 @@
 package arkhipov.weather.services;
 
+import arkhipov.weather.exceptions.BadRequestException;
 import arkhipov.weather.exceptions.NotFoundException;
 import arkhipov.weather.models.Location;
 import arkhipov.weather.models.Weather;
@@ -62,7 +63,11 @@ public class WeatherServiceImpl implements WeatherService {
             Weather weather = new Weather(temperature, wind, pressure, humidity);
             return new Location(name, country, lon, lat, weather);
         }
-        else throw new NotFoundException("Location not found");
+        else if (response.code() == 404)
+            throw new NotFoundException("Location not found!");
+        else if (response.code() == 400)
+            throw new BadRequestException("Bad request!");
+        else throw new RuntimeException();
     }
 
     private String trimQuotes(String string) {

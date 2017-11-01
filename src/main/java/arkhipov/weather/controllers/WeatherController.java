@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/weather")
 public class WeatherController {
     private static Logger LOG = LoggerFactory.getLogger(WeatherController.class);
+
     private WeatherService service;
+
     @Autowired
     public WeatherController(WeatherService service) {
         this.service = service;
